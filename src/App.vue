@@ -1,28 +1,51 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+  <v-app>
+    <v-app-bar
+      app
+      color="primary"
+      dark
+    >
+      <template>
+        <v-tabs>
+          <v-tab to="/game">Juego</v-tab>
+          <v-tab to="/user">Usuario</v-tab>
+          <v-tab to="#">Estadisticas</v-tab>
+        </v-tabs>
+      </template>
+
+      <v-spacer></v-spacer>
+
+    </v-app-bar>
+
+    <v-main>
+      <!-- <HelloWorld/> -->
+      <router-view></router-view>
+      <!-- <Usuario :userData="userLogged" /> -->
+
+      <hr />
+
+      <!-- <Juego/> -->
+    </v-main>
+  </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+// import Usuario from './pages/Usuario';
+// import Juego from './pages/Juego';
 
 export default {
   name: 'App',
-  components: {
-    HelloWorld
-  }
-}
-</script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
+  components: {
+    // Usuario,
+    // Juego
+  },
+
+  data: () => ({
+    //
+  }),
+  beforeMount() {
+    this.$store.dispatch('getUserLogged');
+  },
+};
+</script>
