@@ -10,13 +10,13 @@
         </v-form>
 
         <v-row align="center" justify="center">
-            <v-btn depressed color="primary" v-if="!userLogged" @click="guardarUsuario()">
+            <v-btn depressed color="primary" v-if="!userLogged" @click="saveUser()">
                 <v-icon left>
                     mdi-content-save
                 </v-icon>
                 Guardar
             </v-btn>
-            <v-btn depressed color="warning" v-else @click="editarUsuario()">
+            <v-btn depressed color="warning" v-else @click="editUser()">
                 <v-icon left>
                     mdi-pencil
                 </v-icon>
@@ -64,7 +64,7 @@ export default {
         }
     },
     methods: {
-        async guardarUsuario() {
+        async saveUser() {
             
             if (!this.$refs.form.validate()) return;
 
@@ -90,7 +90,7 @@ export default {
                     }
                 })
                 .then(response => {
-                    console.log({response});
+                    // console.log({response});
 
                     if (response.data.errors) {
                         this.message = response.data.errors[0].message;
@@ -105,17 +105,20 @@ export default {
                 console.error({err});
             }
         },
-        async editarUsuario() {
+        async editUser() {
+
             this.message = null;
+
+            if (!this.$refs.form.validate()) return;
 
             try {
                 await axios.post('', {
-                    query: `mutation ($id: ID!, $name: String!, $lastname: String!, $user: String!, $password: String!, $saldo: Float) {
-                        editUser(id: $id, name: $name, lastname: $lastname, user: $user, password: $password, balance: $saldo) {
+                    query: `mutation ($id: ID!, $name: String!, $lastname: String!, $username: String!, $password: String!, $saldo: Float) {
+                        editUser(id: $id, name: $name, lastname: $lastname, username: $username, password: $password, balance: $saldo) {
                             id
                             name
                             lastname
-                            user
+                            username
                             balance
                         }
                     }`,
@@ -123,13 +126,13 @@ export default {
                         id: this.idUsuario,
                         name: this.name,
                         lastname: this.lastname,
-                        user: this.user,
+                        username: this.username,
                         password: this.password,
                         saldo: parseFloat(this.balance)
                     }
                 })
                 .then(response => {
-                    console.log({response});
+                    // console.log({response});
 
                     if (response.data.errors) {
                         this.message = response.data.errors[0].message;

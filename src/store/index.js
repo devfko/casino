@@ -6,11 +6,15 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
     state: {
-        userLogged: null
+        userLogged: null,
+        isPlaying: false
     },
     mutations: {
         setUserLogged(state, data) {
             state.userLogged = data;
+        },
+        setPlaying(state, data) {
+            state.isPlaying = data;
         }
     },
     actions: {
@@ -32,6 +36,9 @@ export default new Vuex.Store({
             commit('setUserLogged', null);
             localStorage.removeItem("casino-devfko");
             router.push({ path: '/' });
+        },
+        setPlaying({ commit }, data) {
+            commit('setPlaying', data);
         }
     },
     getters: {

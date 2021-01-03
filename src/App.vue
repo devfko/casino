@@ -53,7 +53,7 @@ export default {
   methods: {
     logout() {
       this.$store.dispatch('logout');
-    }
+    },
   },
   computed: {
     ...mapGetters({

@@ -36,7 +36,7 @@ Vue.use(VueRouter);
 router.beforeEach((to, from, next) => {
     if (to.matched.some(record => record.meta.requiredAuth)) {
         if (!store.state.userLogged) {
-            next({ name: '/' });
+            next({ path: '/' });
         } else {
             next();
         }
