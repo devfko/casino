@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-// import store from '../store';
+import store from '../store';
 
 function lazyLoad(page) {
     return () =>
@@ -8,6 +8,11 @@ function lazyLoad(page) {
 }
 
 const routes = [{
+        path: '/',
+        name: 'home',
+        component: lazyLoad('Home')
+    },
+    {
         path: '/user',
         name: 'user',
         component: lazyLoad('Usuario')
@@ -15,7 +20,8 @@ const routes = [{
     {
         path: '/game',
         name: 'game',
-        component: lazyLoad('Juego')
+        component: lazyLoad('Juego'),
+        meta: { requiredAuth: true }
     }
 ];
 
@@ -28,7 +34,15 @@ const router = new VueRouter({
 Vue.use(VueRouter);
 
 router.beforeEach((to, from, next) => {
-    next();
+    if (to.matched.some(record => record.meta.requiredAuth)) {
+        if (!store.state.userLogged) {
+            next({ name: '/' });
+        } else {
+            next();
+        }
+    } else {
+        next();
+    }
 });
 
 export default router;

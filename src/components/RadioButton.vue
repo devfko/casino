@@ -1,9 +1,10 @@
 <template>
     <v-container fluid v-if="items">
-        <v-radio-group>
+        <v-radio-group row>
             <template v-slot:label>
                 <span style="font-size:18px; font-weight: bold">{{description}}</span>
             </template>
+            <br />
             <v-radio v-for="item in items" :key="item.id" :value="item.name" @change="updateValue(item.id)">
                 <template v-slot:label>
                     <span>{{item.name}}</span>

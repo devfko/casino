@@ -20,7 +20,7 @@ export default new Vuex.Store({
         },
         getUserLogged({ commit }) {
             let data = localStorage.getItem("casino-devfko");
-            console.log('data recibida ', JSON.parse(data));
+
             if (data) {
                 commit('setUserLogged', JSON.parse(data));
                 router.push({ path: '/game' });
@@ -28,6 +28,11 @@ export default new Vuex.Store({
                 router.push({ path: '/user' });
             }
         },
+        logout({ commit }) {
+            commit('setUserLogged', null);
+            localStorage.removeItem("casino-devfko");
+            router.push({ path: '/' });
+        }
     },
     getters: {
         userLogged: state => {

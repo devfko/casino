@@ -1,4 +1,4 @@
-# front
+# Casino
 
 ## Project setup
 ```

@@ -4,13 +4,13 @@
             <v-text-field v-model="idUsuario" disabled></v-text-field>
             <v-text-field v-model="name" counter maxlength="20" :rules="[namesRules.required, namesRules.min]" label="Nombre" required></v-text-field>
             <v-text-field v-model="lastname" counter maxlength="20" :rules="[namesRules.required, namesRules.min]" label="Apellido" required></v-text-field>
-            <v-text-field v-model="user" counter maxlength="20" :rules="[userRules.required, userRules.min]" label="Usuario" required></v-text-field>
+            <v-text-field v-model="username" counter maxlength="20" :rules="[userRules.required, userRules.min]" label="Usuario" required></v-text-field>
             <v-text-field v-model="password" counter maxlength="15" :rules="[passRules.required, passRules.min]" label="Password" :append-icon="showPass ? 'mdi-eye' : 'mdi-eye-off'" :type="showPass ? 'text' : 'password'" @click:append="showPass = !showPass" required></v-text-field>
             <v-text-field v-model="balance" type="number" label="Saldo"></v-text-field>
         </v-form>
 
         <v-row align="center" justify="center">
-            <v-btn depressed color="primary" v-if="!userData" @click="guardarUsuario()">
+            <v-btn depressed color="primary" v-if="!userLogged" @click="guardarUsuario()">
                 <v-icon left>
                     mdi-content-save
                 </v-icon>
@@ -38,20 +38,14 @@ import axios from 'axios';
 import { mapGetters } from 'vuex';
 
 export default {
-    props: {
-        userData: {
-            type: Object,
-            default: null
-        }
-    },
     data() {
         return {
             valid: true,
             showPass: false,
-            idUsuario: (this.userData) ? this.userData.id : '',
-            name: (this.userData) ? this.userData.name : '',
-            lastname: (this.userData) ? this.userData.lastname : '',
-            user: (this.userData) ? this.userData.user : '',
+            idUsuario: '',
+            name: '',
+            lastname: '',
+            username: '',
             namesRules: {
                 required: value => !!value || 'Campo Obligatorio (*)',
                 min: value => value.length >= 3 || 'No puede ser inferior a 3 caracteres',
@@ -60,35 +54,37 @@ export default {
                 required: value => !!value || 'Campo Obligatorio (*)',
                 min: value => value.length >= 5 || 'No puede ser inferior a 4 caracteres',
             },
-            password: (this.userData) ? this.userData.password : '',
+            password: '',
             passRules: {
-                required: value => !!value || 'Campo Requerido',
+                required: value => !!value || 'Campo Obligatorio (*)',
                 min: value => value.length >= 8 || 'Debe tener minimo 8 caracteres'
             },
-            balance: (this.userData) ? this.userData.balance : 0,
+            balance: 0,
             message: null
         }
     },
     methods: {
         async guardarUsuario() {
             
+            if (!this.$refs.form.validate()) return;
+
             this.message = null;
 
             try {
                 await axios.post('', {
-                    query: `mutation ($name: String!, $lastname: String!, $user: String!, $password: String!, $saldo: Float) {
-                        addUser(name: $name, lastname: $lastname, user: $user, password: $password, balance: $saldo) {
+                    query: `mutation ($name: String!, $lastname: String!, $username: String!, $password: String!, $saldo: Float) {
+                        addUser(name: $name, lastname: $lastname, username: $username, password: $password, balance: $saldo) {
                             id
                             name
                             lastname
-                            user
+                            username
                             balance
                         }
                     }`,
                     variables: {
                         name: this.name,
                         lastname: this.lastname,
-                        user: this.user,
+                        username: this.username,
                         password: this.password,
                         saldo: parseFloat(this.balance)
                     }
@@ -146,7 +142,17 @@ export default {
             } catch (err) {
                 console.error({err});
             }
+        },
+        loadUser() {
+            this.idUsuario = this.userLogged.id;
+            this.name = this.userLogged.name;
+            this.lastname = this.userLogged.lastname;
+            this.username = this.userLogged.username;
+            this.balance = this.userLogged.balance;
         }
+    },
+    created() {
+        if (this.userLogged) this.loadUser();
     },
     computed: {
         ...mapGetters({
