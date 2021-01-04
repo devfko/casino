@@ -8,10 +8,10 @@ RUN mkdir -p /app
 WORKDIR /app
 
 # Se establecen variables de entorno
-ENV VUE_APP_NODE_ENV = production
-ENV VUE_APP_URL_API_PROD = https://casino-api-devfko.herokuapp.com/graphql
-ENV VUE_APP_TIMER = 180000
-ENV VUE_APP_MINIMUM_BET = 15000
+ENV VUE_APP_NODE_ENV=
+ENV VUE_APP_URL_API_PROD=
+ENV VUE_APP_TIMER=
+ENV VUE_APP_MINIMUM_BET=
 
 # Instala los paquetes existentes en el package.json
 COPY package*.json ./
