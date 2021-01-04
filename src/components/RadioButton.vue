@@ -5,7 +5,7 @@
                 <span style="font-size:18px; font-weight: bold">{{description}}</span>
             </template>
             <br />
-            <v-radio v-for="item in items" :key="item.id" :value="item.name" @change="updateValue(item.id)">
+            <v-radio v-for="item in items" :key="item.id" :value="item.name" @change="updateValue(item)">
                 <template v-slot:label>
                     <span>{{item.name}}</span>
                 </template>

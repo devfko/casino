@@ -15,7 +15,7 @@ export default {
     data() {
         return {
             headers: [
-                { text: 'Color Apostado', align: 'start', value: 'id'},
+                { text: 'Color Apostado', align: 'start', value: 'color'},
                 { text: 'Valor Apostado', align: 'end', value: 'value'},
                 { text: 'Color Resultado', align: 'start', value: 'resultColor.name'},
                 { text: 'Ganancia Obtenida', align: 'end', value: 'profit'},

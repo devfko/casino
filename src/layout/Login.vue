@@ -65,7 +65,7 @@ export default {
                     }
                 })
                 .then(response => {
-                    console.log({response});
+                    // console.log({response});
 
                     if (response.data.data.errors) {
                         this.message = response.data.data.errors[0].message;

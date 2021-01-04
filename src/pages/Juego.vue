@@ -115,12 +115,12 @@ export default {
             idChair: null,
             resultBet: null,
             message: null,
+            typeBet: null,
             arrItems: [],
             arrBets: [],
             infoChair: [],
             infoTable: {},
             tableName: '',
-            typeBet: '',
             typeAlert: 'info',
             availableBalance: true,
             counting: false,
@@ -190,7 +190,7 @@ export default {
 
             if (!this.isBet) {
                 let rnd = Math.floor(Math.random() * this.arrItems.length);
-                this.typeBet = this.arrItems[rnd].id;
+                this.typeBet = this.arrItems[rnd];
                 this.valueBet = Math.floor(this.userLogged.balance * 0.11);
                 this.makeBet();
             }
@@ -313,7 +313,7 @@ export default {
         async makeBet() {
                         
             /** Método que realiza las apuestas sobre la mesa creada o existente */
-            if (this.typeBet == '') {
+            if (this.typeBet == null) {
                 this.showMessage('warning', 'Debe Seleccionar un color para apostar');
                 return;
             }
@@ -344,7 +344,7 @@ export default {
                     variables: {
                         username: this.userLogged.id,
                         table: this.idTable,
-                        color: this.typeBet,
+                        color: this.typeBet.id,
                         value: parseFloat(this.valueBet)
                     }
                 })
@@ -356,17 +356,21 @@ export default {
                         return;
                     }
 
-                    if (response.data.data.addBet.resultColor.id === this.typeBet) {
+                    if (response.data.data.addBet.resultColor.id === this.typeBet.id) {
                         this.showMessage('success', 'Felicitaciones, Acertaste, Vamos por más!! :)');
                     } else {
                         this.showMessage('warning', 'Que falla, no acertaste!!');
                     }
 
+                    /** Contruimos el JSON resultado para ser enviado al componente del DataTable */
                     this.resultBet = response.data.data.addBet;
-                    console.log(this.typeBet);
-                    this.arrBets.push(JSON.parse(JSON.stringify(this.resultBet)));
+                    this.resultBet.color = this.typeBet.name;
+                    this.resultBet = JSON.stringify(this.resultBet);
+                    this.arrBets.push(JSON.parse(this.resultBet));
+
+                    /**Actualizamos el saldo del usuario y se validan los estados */
                     this.userLogged.balance += (response.data.data.addBet.profit - this.valueBet);
-                    this.typeBet = '';
+                    this.typeBet = null;
                     this.validateBalance();
                 })
             } catch (err) {
